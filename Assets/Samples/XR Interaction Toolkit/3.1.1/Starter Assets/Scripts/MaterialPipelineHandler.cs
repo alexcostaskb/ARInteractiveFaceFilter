@@ -1,14 +1,18 @@
 using UnityEngine.Rendering;
 using System.Collections.Generic;
+
 #if UNITY_EDITOR
+
 using UnityEditor;
+
 #endif
 
 namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
 {
 #if UNITY_EDITOR
+
     [InitializeOnLoad]
-    static class RenderPipelineValidation
+    internal static class RenderPipelineValidation
     {
         static RenderPipelineValidation()
         {
@@ -16,7 +20,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
                 pipelineHandler.AutoRefreshPipelineShaders();
         }
 
-        static List<MaterialPipelineHandler> GetAllInstances()
+        private static List<MaterialPipelineHandler> GetAllInstances()
         {
             var instances = new List<MaterialPipelineHandler>();
 
@@ -33,6 +37,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             return instances;
         }
     }
+
 #endif
 
     /// <summary>
@@ -60,19 +65,21 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
     {
         [SerializeField]
         [Tooltip("List of materials and their associated shaders.")]
-        List<ShaderContainer> m_ShaderContainers;
+        private List<ShaderContainer> m_ShaderContainers;
 
         [SerializeField]
         [Tooltip("If true, the shaders will be refreshed automatically when the editor opens and when this scriptable object instance is enabled.")]
-        bool m_AutoRefreshShaders = true;
+        private bool m_AutoRefreshShaders = true;
 
 #if UNITY_EDITOR
-        void OnEnable()
+
+        private void OnEnable()
         {
             if (Application.isPlaying)
                 return;
             AutoRefreshPipelineShaders();
         }
+
 #endif
 
         public void AutoRefreshPipelineShaders()
@@ -117,7 +124,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             }
         }
 
-        static void MarkMaterialModified(Material material)
+        private static void MarkMaterialModified(Material material)
         {
 #if UNITY_EDITOR
             EditorUtility.SetDirty(material);
@@ -126,6 +133,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
     }
 
 #if UNITY_EDITOR
+
     /// <summary>
     /// Custom property drawer for the shader container class.
     /// </summary>
@@ -238,5 +246,6 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             }
         }
     }
+
 #endif
 }

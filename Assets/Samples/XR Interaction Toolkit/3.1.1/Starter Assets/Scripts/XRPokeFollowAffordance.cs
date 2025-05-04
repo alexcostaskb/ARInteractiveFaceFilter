@@ -1,7 +1,6 @@
 using System;
 using Unity.Mathematics;
 using Unity.XR.CoreUtils.Bindings;
-using UnityEngine.XR.Interaction.Toolkit.AffordanceSystem.State;
 using UnityEngine.XR.Interaction.Toolkit.Filtering;
 using UnityEngine.XR.Interaction.Toolkit.Utilities.Tweenables.Primitives;
 
@@ -22,7 +21,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
         [SerializeField]
         [Tooltip("Transform that will move in the poke direction when this or a parent GameObject is poked." +
                  "\nNote: Should be a direct child GameObject.")]
-        Transform m_PokeFollowTransform;
+        private Transform m_PokeFollowTransform;
 
         /// <summary>
         /// Transform that will animate along the axis of interaction when this interactable is poked.
@@ -37,7 +36,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
         [SerializeField]
         [Range(0f, 20f)]
         [Tooltip("Multiplies transform position interpolation as a factor of Time.deltaTime. If 0, no smoothing will be applied.")]
-        float m_SmoothingSpeed = 16f;
+        private float m_SmoothingSpeed = 16f;
 
         /// <summary>
         /// Multiplies transform position interpolation as a factor of <see cref="Time.deltaTime"/>. If <c>0</c>, no smoothing will be applied.
@@ -50,7 +49,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
 
         [SerializeField]
         [Tooltip("When this component is no longer the target of the poke, the Poke Follow Transform returns to the original position.")]
-        bool m_ReturnToInitialPosition = true;
+        private bool m_ReturnToInitialPosition = true;
 
         /// <summary>
         /// When this component is no longer the target of the poke, the <see cref="pokeFollowTransform"/> returns to the original position.
@@ -64,7 +63,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
         [SerializeField]
         [Tooltip("Whether to apply the follow animation if the target of the poke is a child of this transform. " +
                  "This is useful for UI objects that may have child graphics.")]
-        bool m_ApplyIfChildIsTarget = true;
+        private bool m_ApplyIfChildIsTarget = true;
 
         /// <summary>
         /// Whether to apply the follow animation if the target of the poke is a child of this transform.
@@ -78,7 +77,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
 
         [SerializeField]
         [Tooltip("Whether to keep the Poke Follow Transform from moving past a maximum distance from the poke target.")]
-        bool m_ClampToMaxDistance;
+        private bool m_ClampToMaxDistance;
 
         /// <summary>
         /// Whether to keep the <see cref="pokeFollowTransform"/> from moving past <see cref="maxDistance"/> from the poke target.
@@ -91,7 +90,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
 
         [SerializeField]
         [Tooltip("The maximum distance from this transform that the Poke Follow Transform can move.")]
-        float m_MaxDistance;
+        private float m_MaxDistance;
 
         /// <summary>
         /// The maximum distance from this transform that the <see cref="pokeFollowTransform"/> can move when
@@ -112,19 +111,19 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             set => m_InitialPosition = value;
         }
 
-        IPokeStateDataProvider m_PokeDataProvider;
-        IMultiPokeStateDataProvider m_MultiPokeStateDataProvider;
+        private IPokeStateDataProvider m_PokeDataProvider;
+        private IMultiPokeStateDataProvider m_MultiPokeStateDataProvider;
 
 #pragma warning disable CS0618 // Type or member is obsolete
-        readonly Vector3TweenableVariable m_TransformTweenableVariable = new Vector3TweenableVariable();
+        private readonly Vector3TweenableVariable m_TransformTweenableVariable = new Vector3TweenableVariable();
 #pragma warning restore CS0618 // Type or member is obsolete
-        readonly BindingsGroup m_BindingsGroup = new BindingsGroup();
-        Vector3 m_InitialPosition;
-        bool m_IsFirstFrame;
+        private readonly BindingsGroup m_BindingsGroup = new BindingsGroup();
+        private Vector3 m_InitialPosition;
+        private bool m_IsFirstFrame;
 
         [HideInInspector]
         [SerializeField]
-        XRPokeFilter m_PokeFilter = null;
+        private XRPokeFilter m_PokeFilter = null;
 
         /// <summary>
         /// See <see cref="MonoBehaviour"/>.
@@ -197,7 +196,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             }
         }
 
-        void OnPokeStateDataUpdated(PokeStateData data)
+        private void OnPokeStateDataUpdated(PokeStateData data)
         {
             var pokeTarget = data.target;
             var applyFollow = m_ApplyIfChildIsTarget
@@ -226,7 +225,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             m_PokeFollowTransform.localPosition = m_InitialPosition;
         }
 
-        void OnDrawGizmos()
+        private void OnDrawGizmos()
         {
             if (!TryGetTargetEndPoint(out var endPoint))
                 return;
@@ -235,7 +234,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             Gizmos.DrawLine(transform.position, endPoint);
         }
 
-        bool TryGetTargetEndPoint(out Vector3 endPoint)
+        private bool TryGetTargetEndPoint(out Vector3 endPoint)
         {
             if (!m_ClampToMaxDistance || m_PokeFilter == null)
             {
@@ -249,7 +248,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             return true;
         }
 
-        Vector3 ComputeRotatedDepthEvaluationAxis(PokeThresholdData pokeThresholdData)
+        private Vector3 ComputeRotatedDepthEvaluationAxis(PokeThresholdData pokeThresholdData)
         {
             if (pokeThresholdData == null)
                 return Vector3.zero;
@@ -261,10 +260,12 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
                 case PokeAxis.NegativeX:
                     rotatedDepthEvaluationAxis = transform.right;
                     break;
+
                 case PokeAxis.Y:
                 case PokeAxis.NegativeY:
                     rotatedDepthEvaluationAxis = transform.up;
                     break;
+
                 case PokeAxis.Z:
                 case PokeAxis.NegativeZ:
                     rotatedDepthEvaluationAxis = transform.forward;
@@ -283,7 +284,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets
             return rotatedDepthEvaluationAxis;
         }
 
-        void OnValidate()
+        private void OnValidate()
         {
             if (m_PokeFilter == null)
             {
